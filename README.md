@@ -2,6 +2,8 @@
 
 Responzívny slovenský web fiktívnej neapolskej pizzerie. Projekt do portfólia postavený na Next.js 16 (App Router), React, TypeScripte a Tailwind CSS 4.
 
+**[Pozrieť živý web FORNO →](https://haldyoso.github.io/Portfolio_Restaurant_Forno_Pizza/)**
+
 ## Spustenie
 
 Node.js 22 alebo novší a npm. Overené s Node.js 24.
@@ -17,7 +19,7 @@ Pri nasadení na server s Next.js nastav `NEXT_PUBLIC_SITE_URL` na finálnu vere
 
 ## GitHub Pages
 
-Pripravená adresa: [FORNO na GitHub Pages](https://haldyoso.github.io/Portfolio_Restaurant_Forno_Pizza/). Publikovanie vyžaduje aktivované Pages so zdrojom **GitHub Actions**. Na pláne GitHub Free musí byť repozitár verejný.
+Verejný web: [FORNO na GitHub Pages](https://haldyoso.github.io/Portfolio_Restaurant_Forno_Pizza/). Repozitár je verejný a Pages používa zdroj **GitHub Actions**.
 
 Workflow `.github/workflows/pages.yml` pri každom pushi do `main` zostaví statický web, skontroluje lint a TypeScript, spustí testy na desktope a mobile a nasadí výsledok. Možno ho spustiť aj manuálne cez Actions. Server ani platený hosting nie sú potrebné.
 
