@@ -1,13 +1,18 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+const prefix =
+  process.env.PAGES_TEST === "true"
+    ? process.env.NEXT_PUBLIC_BASE_PATH || "/Portfolio_Restaurant_Forno_Pizza"
+    : "";
+const routeUrl = (route: string) => `${prefix}${route}`;
 const pages = ["/", "/menu", "/nas-pribeh", "/kontakt"];
 
 for (const route of pages) {
   test(`${route}: obsah, obrázky, dostupnosť a šírka`, async ({ page }) => {
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
-    const response = await page.goto(route);
+    const response = await page.goto(routeUrl(route));
     expect(response?.status()).toBe(200);
     await expect(page.locator("main h1")).toHaveCount(1);
     await expect(page).toHaveTitle(/FORNO/);
@@ -40,7 +45,7 @@ for (const route of pages) {
 }
 
 test("menu: kategórie, vegetariánsky filter a klávesnica", async ({ page }) => {
-  await page.goto("/menu");
+  await page.goto(routeUrl("/menu"));
   await expect(page.locator("#menu-items article")).toHaveCount(10);
   await page.getByLabel("Iba vegetariánske").check();
   await expect(page.locator("#menu-items article")).toHaveCount(6);
@@ -71,11 +76,11 @@ test("navigácia: všetky stránky a odkaz na konkrétnu pizzu", async ({
   page,
   isMobile,
 }) => {
-  await page.goto("/");
+  await page.goto(routeUrl("/"));
   await page
     .getByRole("link", { name: "Pozrieť Burrata v menu", exact: true })
     .click();
-  await expect(page).toHaveURL(/menu#burrata$/);
+  await expect(page).toHaveURL(/menu\/?#burrata$/);
   await expect(page.locator("#burrata")).toBeInViewport();
   if (isMobile) {
     await page.getByRole("button", { name: "Otvoriť navigáciu" }).click();
@@ -89,7 +94,7 @@ test("navigácia: všetky stránky a odkaz na konkrétnu pizzu", async ({
       .getByRole("link", { name: "Náš príbeh" })
       .click();
   }
-  await expect(page).toHaveURL(/nas-pribeh$/);
+  await expect(page).toHaveURL(/nas-pribeh\/?$/);
   await expect(page.locator("main h1")).toBeInViewport();
   await page
     .getByRole("navigation", {
@@ -97,7 +102,7 @@ test("navigácia: všetky stránky a odkaz na konkrétnu pizzu", async ({
     })
     .getByRole("link", { name: "Kontakt", exact: true })
     .click();
-  await expect(page).toHaveURL(/kontakt$/);
+  await expect(page).toHaveURL(/kontakt\/?$/);
   await expect(page.locator("main h1")).toBeInViewport();
   await expect(
     page.getByText("Ukážková prevádzka", { exact: true }),
@@ -105,7 +110,7 @@ test("navigácia: všetky stránky a odkaz na konkrétnu pizzu", async ({
   await page.getByRole("link", { name: "FORNO — úvod" }).click();
   await expect(page).toHaveURL(/\/$/);
   await page.getByRole("link", { name: "Nájdi nás", exact: true }).click();
-  await expect(page).toHaveURL(/kontakt$/);
+  await expect(page).toHaveURL(/kontakt\/?$/);
   await expect(page.locator("main h1")).toBeInViewport();
 });
 
@@ -114,7 +119,7 @@ test("mobilná navigácia: fokus, Escape a zatvorenie po výbere", async ({
   isMobile,
 }) => {
   test.skip(!isMobile, "Mobilné ovládanie");
-  await page.goto("/");
+  await page.goto(routeUrl("/"));
   const toggle = page.getByRole("button", { name: "Otvoriť navigáciu" });
   await toggle.click();
   const nav = page.getByRole("navigation", { name: "Mobilná navigácia" });
@@ -125,7 +130,7 @@ test("mobilná navigácia: fokus, Escape a zatvorenie po výbere", async ({
   await expect(toggle).toBeFocused();
   await toggle.click();
   await nav.getByRole("link", { name: /Menu/ }).click();
-  await expect(page).toHaveURL(/menu$/);
+  await expect(page).toHaveURL(/menu\/?$/);
   await expect(nav).toHaveCount(0);
   expect(await page.evaluate(() => document.body.style.overflow)).not.toBe(
     "hidden",
@@ -137,7 +142,7 @@ test("kontaktný e-mail: kopírovanie a jeho nedostupnosť", async ({
   context,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/kontakt");
+  await page.goto(routeUrl("/kontakt"));
   await page
     .getByRole("button", { name: "Skopírovať ukážkový e-mail" })
     .click();
@@ -164,7 +169,7 @@ test("úzka obrazovka, reduced motion a 404", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   for (const route of pages) {
-    await page.goto(route);
+    await page.goto(routeUrl(route));
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -176,10 +181,10 @@ test("úzka obrazovka, reduced motion a 404", async ({ page }) => {
       ),
     ).toBe("auto");
   }
-  await page.goto("/stranka-ktora-neexistuje");
+  await page.goto(routeUrl("/stranka-ktora-neexistuje"));
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Asi sme",
   );
   await page.getByRole("link", { name: "Späť k menu" }).click();
-  await expect(page).toHaveURL(/menu$/);
+  await expect(page).toHaveURL(/menu\/?$/);
 });

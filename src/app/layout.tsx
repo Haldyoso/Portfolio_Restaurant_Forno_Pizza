@@ -5,11 +5,12 @@ import "@fontsource/dm-serif-display/latin-400-italic.css";
 import "@fontsource/dm-serif-display/latin-ext-400-italic.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { assetPath } from "@/lib/site-path";
 import "./globals.css";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const socialImage = new URL(assetPath("/images/pizza-hero.webp"), siteUrl).href;
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  ),
+  metadataBase: new URL(siteUrl),
   title: { default: "FORNO — pizza napoletana", template: "%s | FORNO" },
   description:
     "Pomaly kysnuté cesto, poctivé suroviny a horúca pec. Objav FORNO, fiktívnu neapolskú pizzeriu vytvorenú ako projekt do portfólia.",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/pizza-hero.webp",
+        url: socialImage,
         width: 1536,
         height: 1024,
         alt: "Neapolská pizza Margherita",
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "FORNO — pizza napoletana",
-    images: ["/images/pizza-hero.webp"],
+    images: [socialImage],
   },
   robots: { index: true, follow: true },
 };

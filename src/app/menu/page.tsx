@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import { MenuList } from "@/components/menu-list";
 import { OvenMark } from "@/components/brand";
 export const metadata: Metadata = {

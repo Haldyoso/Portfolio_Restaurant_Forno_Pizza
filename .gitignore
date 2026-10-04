@@ -18,6 +18,8 @@
 
 # next.js
 /.next/
+/.next-pages/
+/public/images/responsive/
 /out/
 
 # production

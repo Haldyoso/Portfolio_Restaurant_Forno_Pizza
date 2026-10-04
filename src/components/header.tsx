@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Menu, X, Utensils, MapPin } from "lucide-react";
 import { Brand } from "./brand";
+import { normalizedPath } from "@/lib/site-path";
 const links = [
   { href: "/", label: "Úvod" },
   { href: "/menu", label: "Menu" },
@@ -11,7 +12,7 @@ const links = [
   { href: "/kontakt", label: "Kontakt" },
 ];
 export function Header() {
-  const pathname = usePathname();
+  const pathname = normalizedPath(usePathname());
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const nav = useRef<HTMLElement>(null);

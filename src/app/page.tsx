@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/site-image";
 import Link from "@/components/site-link";
 import { ArrowDown, ArrowUpRight, Flame, Wheat, Heart } from "lucide-react";
 import { CraftStamp } from "@/components/brand";

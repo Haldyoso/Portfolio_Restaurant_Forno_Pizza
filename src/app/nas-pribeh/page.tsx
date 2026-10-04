@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import { CraftStamp } from "@/components/brand";
 import { TextLink } from "@/components/shared";
 export const metadata: Metadata = {

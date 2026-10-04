@@ -13,7 +13,20 @@ npm run dev
 
 Web: [localhost:3000](http://localhost:3000). Produkčná verzia: `npm run build`, potom `npm start`.
 
-Pred nasadením skopíruj `.env.example` do `.env.local` a nastav `NEXT_PUBLIC_SITE_URL` na finálnu verejnú URL pre správne odkazy v Open Graph metadátach. V lokálnom prostredí sa používa `http://localhost:3000`. Hostiteľ musí podporovať Next.js vrátane optimalizácie obrázkov.
+Pri nasadení na server s Next.js nastav `NEXT_PUBLIC_SITE_URL` na finálnu verejnú URL. V lokálnom prostredí sa používa `http://localhost:3000`.
+
+## GitHub Pages
+
+Pripravená adresa: [FORNO na GitHub Pages](https://haldyoso.github.io/Portfolio_Restaurant_Forno_Pizza/). Publikovanie vyžaduje aktivované Pages so zdrojom **GitHub Actions**. Na pláne GitHub Free musí byť repozitár verejný.
+
+Workflow `.github/workflows/pages.yml` pri každom pushi do `main` zostaví statický web, skontroluje lint a TypeScript, spustí testy na desktope a mobile a nasadí výsledok. Možno ho spustiť aj manuálne cez Actions. Server ani platený hosting nie sú potrebné.
+
+```sh
+npm run build:pages
+npm run preview:pages
+```
+
+Náhľad: [localhost:3100/Portfolio_Restaurant_Forno_Pizza/](http://localhost:3100/Portfolio_Restaurant_Forno_Pizza/). Export je v `out/`. Build predgeneruje responzívne WebP obrázky pomocou Sharp; tieto odvodené súbory sa necommitujú. Odkazy, obrázky a metadáta rešpektujú podadresár repozitára. Pri premenovaní repozitára nastav v build prostredí `NEXT_PUBLIC_BASE_PATH` a `NEXT_PUBLIC_SITE_URL` a zopakuj build.
 
 ## Obsah a úpravy
 
@@ -37,12 +50,14 @@ npm run check
 npm run build
 npx playwright install chromium
 npm run test:e2e
+# Overenie statickej verzie pre GitHub Pages po build:pages:
+npm run test:pages
 ```
 
 Playwright spustí produkčný server na porte 3100. Testuje desktop 1440 px, mobil 390 px a úzky viewport 320 px: všetky stránky, obrázky, pretekanie, WCAG A/AA cez axe, kategórie, vegetariánsky filter, navigáciu, odkazy na konkrétne pizze, Escape/fokus, clipboard vrátane chyby, reduced motion a 404. Mobilný test sa na desktopovom projekte zámerne preskočí. HTML report je v `playwright-report/`. Vizuálna kontrola sa robila aj v prehliadači na desktope a mobile.
 
 ## Rozsah a obmedzenia
 
-Bez objednávok, platieb, účtov, kontaktného formulára a CMS. Všetky podnikové údaje, ceny aj alergény sú ilustračné; `.example` e-mail nemá slúžiť na doručovanie. Web neobsahuje recenzie ani ocenenia a označuje fiktívny charakter projektu. Nie je verejne nasadený. Kontrola dostupnosti je automatická a manuálna cez klávesnicu; nejde o úplný audit so všetkými asistenčnými technológiami.
+Bez objednávok, platieb, účtov, kontaktného formulára a CMS. Všetky podnikové údaje, ceny aj alergény sú ilustračné; `.example` e-mail nemá slúžiť na doručovanie. Web neobsahuje recenzie ani ocenenia a označuje fiktívny charakter projektu. Kontrola dostupnosti je automatická a manuálna cez klávesnicu; nejde o úplný audit so všetkými asistenčnými technológiami.
 
 Pri vytvorení projektu `npm audit --omit=dev` hlási **0 zraniteľností**. Plný audit hlási 5 vysokých nálezov v jednej vývojovej vetve `eslint-config-next → fast-glob → micromatch → braces` (GHSA-vfj7-8cjw-p6xm); pre používanú verziu `braces` zatiaľ nie je dostupná oprava. Produkčné závislosti nie sú týmto nálezom dotknuté. Nútený downgrade Next ESLint konfigurácie sa nepoužil; pri aktualizácii nástrojov treba audit zopakovať.

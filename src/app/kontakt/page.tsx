@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import Link from "@/components/site-link";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { Hours } from "@/components/shared";
